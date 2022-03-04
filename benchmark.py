@@ -11,11 +11,17 @@ from datetime import datetime
 #     Second argument is the script we are running
 
 def main():
-    if len(sys.argv) != 2:
+    if sys.argv[1] == "-help":
+        print("Run in following format:")
+        print("  py benchmark.py arg1 arg2")
+        print("Where arg1 is the type of benchmark (either 'preprocess' or 'model'")
+        print("And arg2 is the script to be run")
+        sys.exit(0)
+    if len(sys.argv) != 3:
         print("ERROR: Script must receive two arguments: the first indicating whether it is for a preprocessing script or a model training script, and the second for the script itself")
         sys.exit(0)
     #IMPORT SCRIPT MODULE
-    script = sys.argv[1]
+    script = sys.argv[2]
     mod = importlib.import_module(script)
     #START TIME
     start = time.perf_counter()
@@ -27,9 +33,9 @@ def main():
     elapsed = end-start
     #GET DATETIME
     dt = datetime.now()
-    if sys.argv == "preprocess":
+    if sys.argv[1] == "preprocess":
         update_benchmark_preprocess(script, dt, elapsed)
-    elif sys.argv == "model":
+    elif sys.argv[1] == "model":
         update_benchmark_model(script, dt, elapsed, result)
 
 def update_benchmark_model(script, dt, elapsed, result):
@@ -67,3 +73,5 @@ def update_benchmark_preprocess(script, dt, elapsed):
     df.append(row, ignore_index=True)
     df.to_csv("benchmark_preprocess.csv")
     return
+
+main()
