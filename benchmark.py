@@ -45,7 +45,7 @@ def update_benchmark_model(script, dt, elapsed, result):
     else:
         df = pd.read_csv('benchmark_model.csv')
     #Add row to dataframe
-    row = {
+    df2 = pd.DataFrame({
         "script": script,
         "datetime": dt,
         "time_elapsed": elapsed,
@@ -53,25 +53,24 @@ def update_benchmark_model(script, dt, elapsed, result):
         "best_train_accuracy": result["best_train_accuracy"],
         "final_test_accuracy": result["best_test_accuracy"],
         "best_test_accuracy": result["best_test_accuracy"]
-    }
-    df.append(row, ignore_index=True)
-    df.to_csv("benchmark_model.csv")
+    })
+    df = df.append(df2)
+    df.to_csv("benchmark_model.csv", index=False)
     return
 
 def update_benchmark_preprocess(script, dt, elapsed):
     # script | datetime of trial | time elapsed
+    #Add row to dataframe
     if os.path.getsize("benchmark_preprocess.csv") == 0:
         df = pd.DataFrame(columns = ["script", "datetime", "time_elapsed"])
     else:
         df = pd.read_csv('benchmark_preprocess.csv')
-    #Add row to dataframe
-    row = {
-        "script": script,
-        "datetime": dt,
-        "time_elapsed": elapsed
-    }
-    df.append(row, ignore_index=True)
-    df.to_csv("benchmark_preprocess.csv")
+    df2 = pd.DataFrame({
+        "script": [script],
+        "datetime": [dt],
+        "time_elapsed": [elapsed]
+    })
+    df = df.append(df2)
+    df.to_csv("benchmark_preprocess.csv", index=False)
     return
-
 main()
