@@ -14,9 +14,7 @@ if not os.path.isdir('turtle_noblur'):
 path = "./turtles-origcrop/"
 noblur_path = './turtle_noblur/'
 for imagePath in paths.list_images(path):
-    # load the image, convert it to grayscale, and compute the
-    # focus measure of the image using the Variance of Laplacian
-    # method
+    # load the image, convert it to grayscale
     image = cv2.imread(imagePath)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     fm = variance_of_laplacian(gray)
