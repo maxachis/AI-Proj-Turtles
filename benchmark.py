@@ -17,7 +17,7 @@ def main():
         print("Where arg1 is the type of benchmark (either 'preprocess' or 'model'")
         print("And arg2 is the script to be run")
         sys.exit(0)
-    if len(sys.argv) != 3:
+    elif len(sys.argv) != 3:
         print("ERROR: Script must receive two arguments: the first indicating whether it is for a preprocessing script or a model training script, and the second for the script itself")
         sys.exit(0)
     #IMPORT SCRIPT MODULE

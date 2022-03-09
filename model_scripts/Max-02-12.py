@@ -7,13 +7,18 @@ import tensorflow as tf
 train = pd.read_csv('../train.csv')
 test = pd.read_csv('../test.csv')
 sample_submission = pd.read_csv('../sample_submission.csv')
+src_dir = os.path.join(os.getcwd(), "..\\image_datasets", 'turtle_big_classes')
+print(src_dir)
+
+
+
 
 batch_size = 32
 img_height = 224
 img_width = 224
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
-  'turtle_noblur',
+  src_dir,
   validation_split=0.2,
   subset="training",
   seed=123,
@@ -22,7 +27,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
   batch_size=batch_size)
 
 val_ds = tf.keras.utils.image_dataset_from_directory(
-  'turtle_noblur',
+  src_dir,
   validation_split=0.2,
   subset="validation",
   seed=123,
@@ -39,7 +44,7 @@ AUTOTUNE = tf.data.AUTOTUNE
 train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
-num_classes = 2
+num_classes = 100
 IMG_SIZE = 224
 
 model = tf.keras.Sequential([
@@ -88,3 +93,4 @@ def run_model_and_log(model, dataset, validation_data, num_epochs):
     "best_test_accuracy": -1
   }
 
+run_model_and_log(model, train_ds, val_ds, 5)
