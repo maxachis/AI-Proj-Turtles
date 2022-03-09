@@ -4,9 +4,9 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
-train = pd.read_csv('train.csv')
-test = pd.read_csv('test.csv')
-sample_submission = pd.read_csv('sample_submission.csv')
+train = pd.read_csv('../train.csv')
+test = pd.read_csv('../test.csv')
+sample_submission = pd.read_csv('../sample_submission.csv')
 
 batch_size = 32
 img_height = 224
