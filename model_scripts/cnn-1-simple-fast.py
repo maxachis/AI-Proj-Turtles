@@ -27,15 +27,18 @@ train["turtle_num"] = train["turtle_id"].map(turtle_num_lookup)
 #   assert set(df.image_location.unique()) == set(['left', 'right', 'top'])
 
 
-turtle_imgs_dir = "image_datasets/turtle_edge"
+# turtle_imgs_dir = "image_datasets/turtle_edge"
+turtle_imgs_dir = "image_datasets/turtle_origcrop"
+# turtle_imgs_dir = "image_datasets/turtle_nobg"
 train_image_paths = [os.path.join(turtle_imgs_dir, "%s.JPG" % f) for f in train.image_id]
-train_images = np.array([img_to_array(load_img(f, grayscale=True)) for f in train_image_paths]) / 255
+train_images = np.array([img_to_array(load_img(f, color_mode="grayscale")) for f in train_image_paths]) / 255
 
 tf.keras.backend.clear_session()
 
 filtersize = (3,3)
 
 model = tf.keras.Sequential([
+    # tf.keras.layers.RandomRotation((-0.1, 0.1), input_shape=(224,224,1)),
     tf.keras.layers.Conv2D(32, filtersize, activation='relu', input_shape=(224,224,1)),
     tf.keras.layers.MaxPool2D((2,2)),
     tf.keras.layers.Conv2D(64, filtersize, activation='relu'),
@@ -48,12 +51,12 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(train.turtle_id.nunique() + 1)
 ])
 
-model.compile(optimizer='adam',
+model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
     loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
     metrics=['accuracy'])
 
 model.summary()
 
-fitstats = model.fit(train_images, train.turtle_num, epochs=10, validation_split=0.30)
+fitstats = model.fit(train_images, train.turtle_num, epochs=200, validation_split=0.30)
 
 
